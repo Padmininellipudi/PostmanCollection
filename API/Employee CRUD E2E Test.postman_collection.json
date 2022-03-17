@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "0d65fe75-bf89-4041-8209-480fa6749bc0",
+		"name": "Employee CRUD E2E Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateNewEmployee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Assertion 1 - Status Code Check\r",
+							"pm.test(\"Status code check\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Assertion 2 - Response valude check\r",
+							"pm.test(\"Check key-value pairs in the response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.name).to.eql(\"Padmini\");\r",
+							"    pm.expect(jsonData.data.salary).to.eql(\"12345\");\r",
+							"    pm.expect(jsonData.data.age).to.eql(\"29\");\r",
+							"});\r",
+							"\r",
+							"//Set employeeId as environment variable\r",
+							"pm.test(\"Set employeeId as environment variable\", function() {\r",
+							"    var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"employeeId\", jsonData.data.id);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Padmini\",\r\n    \"salary\":\"12345\",\r\n    \"age\":\"29\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/create",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateEmployeeDetails",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Assertion 1 - Status Code Check\r",
+							"pm.test(\"Status code check\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Assertion 2 - Response Value Check\r",
+							"pm.test(\"Check key-value pairs in the response\", function() {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.name).to.eql(\"Padmini Nellipudi\");\r",
+							"    pm.expect(jsonData.data.salary).to.eql(\"1234\");\r",
+							"    pm.expect(jsonData.data.age).to.eql(\"28\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Padmini Nellipudi\",\r\n    \"salary\":\"1234\",\r\n    \"age\":\"28\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/update/{{employeeId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"{{employeeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteEmployee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Assertion 1 - Status Code Check\r",
+							"pm.test(\"Status code check\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Assertion 2 - Response Value Check\r",
+							"pm.test(\"Check delete key-value pair\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+							"    pm.expect(jsonData.toString()).to.eql(pm.environment.get(\"employeeId\").toString());\r",
+							"    pm.expect(jsonData.message).to.eql(\"Successfully! Record has been Deleted\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/delete/{{employeeId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"delete",
+						"{{employeeId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
